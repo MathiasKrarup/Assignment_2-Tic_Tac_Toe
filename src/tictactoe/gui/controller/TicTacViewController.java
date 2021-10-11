@@ -77,10 +77,24 @@ public class TicTacViewController implements Initializable {
             int r = (row == null) ? 0 : row;
             int c = (col == null) ? 0 : col;
             if (game.play(c, r)) {
+                game.incrementPlayer();
+                int player = game.getNextPlayer();
+                String x  = player == 0 ? "X" : "O";
+                Button button = (Button) event.getSource();
+                button.setText(x);
+                game.setGrid(c, r, x);
                 if (game.isGameOver()) {
                     int winner = game.getWinner();
                     displayWinner(winner);
-                    scoreModel.setNextWinner(winner + "");
+                    if (winner == 0) {
+                        scoreModel.setNextWinner("X");
+                    }
+                    else if (winner == 1) {
+                        scoreModel.setNextWinner("O");
+                    }
+                    else {
+                        scoreModel.setNextWinner("draw");
+                    }
                 } else {
                     setPlayer();
                 }
@@ -124,12 +138,13 @@ public class TicTacViewController implements Initializable {
     @FXML
     private void handleNewGame(ActionEvent event) {
         if (currentGameMode == choicePlayMode.getSelectionModel().getSelectedItem()) {
-            game.newGame();
+            game.resetBoard();
         } else {
             currentGameMode = choicePlayMode.getSelectionModel().getSelectedItem();
             game = GameBoardFactory.getGameModel(currentGameMode);
         }
         setPlayer();
+        game.resetBoard();
         clearBoard();
     }
 
@@ -147,12 +162,14 @@ public class TicTacViewController implements Initializable {
      */
     private void displayWinner(int winner) {
         String message;
+        // ? er en conditional operator ligesom en if sætning, hvor : står for "else"
+        String winnerText = winner == 0 ? "X": "O";
         if (winner == -1) {
             message = "It's a draw :-(";
         }
         else
         {
-            message = "Player " + winner + " wins!!!";
+            message = "Player " + winnerText + " wins!!!";
         }
         lblPlayer.setText(message);
     }

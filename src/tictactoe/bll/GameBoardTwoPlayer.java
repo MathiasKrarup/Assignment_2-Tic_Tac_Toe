@@ -9,9 +9,15 @@ public class GameBoardTwoPlayer implements IGameModel
 
     public int playerturn = 0;
 
+    private final String[][] grid;
+
+    private int turnsLeft;
+
     protected GameBoardTwoPlayer()
     {
-
+        grid = new String[3][3];
+        resetBoard();
+        turnsLeft = 9;
     }
 
 
@@ -27,6 +33,18 @@ public class GameBoardTwoPlayer implements IGameModel
 
     }
 
+    // Funktion til at reset spillet
+    public void resetBoard() {
+        for (int i = 0; i < grid.length;  i++) {
+            for (int j = 0; j < grid.length; j++){
+                grid[i][j] = "";
+            }
+        }
+    }
+
+    public void setGrid(int col, int row, String text){
+        grid[col][row] = text;
+    }
     /**
      * Attempts to let the current player play at the given coordinates. It the
      * attempt is successful the current player has ended his turn and it is the
@@ -39,9 +57,8 @@ public class GameBoardTwoPlayer implements IGameModel
      */
     @Override
     public boolean play(int col, int row) {
-        //TODO Implement this method
-        playerturn++;
-        return true;
+        return (!isGameOver() && grid[col][row].matches(""));
+
     }
 
     /**
@@ -52,10 +69,47 @@ public class GameBoardTwoPlayer implements IGameModel
      */
     @Override
     public boolean isGameOver() {
-        //TODO Implement this method
-        return false;
+        if (turnsLeft > 0) {
+            return checkXWin() || checkOWin();
+        }
+        return true;
     }
 
+    private boolean checkXWin() {
+        return (grid[0][0].matches("[X]") && grid[1][0].matches("[X]") && grid[2][0].matches("[X]") ||
+                grid[0][1].matches("[X]") && grid[1][1].matches("[X]") && grid[2][1].matches("[X]") ||
+                grid[0][2].matches("[X]") && grid[1][2].matches("[X]") && grid[2][2].matches("[X]") ||
+                //Lodret
+                grid[0][0].matches("[X]") && grid[0][1].matches("[X]") && grid[0][2].matches("[X]") ||
+                grid[1][0].matches("[X]") && grid[1][1].matches("[X]") && grid[1][2].matches("[X]") ||
+                grid[2][0].matches("[X]") && grid[2][1].matches("[X]") && grid[2][2].matches("[X]") ||
+                //kryds
+                grid[0][0].matches("[X]") && grid[1][1].matches("[X]") && grid[2][2].matches("[X]") ||
+                grid[0][2].matches("[X]") && grid[1][1].matches("[X]") && grid[2][0].matches("[X]"));
+    }
+
+    private boolean checkOWin() {
+        return (grid[0][0].matches("[O]") && grid[1][0].matches("[O]") && grid[2][0].matches("[O]") ||
+                grid[0][1].matches("[O]") && grid[1][1].matches("[O]") && grid[2][1].matches("[O]") ||
+                grid[0][2].matches("[O]") && grid[1][2].matches("[O]") && grid[2][2].matches("[O]") ||
+                //Lodret
+                grid[0][0].matches("[O]") && grid[0][1].matches("[O]") && grid[0][2].matches("[O]") ||
+                grid[1][0].matches("[O]") && grid[1][1].matches("[O]") && grid[1][2].matches("[O]") ||
+                grid[2][0].matches("[O]") && grid[2][1].matches("[O]") && grid[2][2].matches("[O]") ||
+                //kryds
+                grid[0][0].matches("[O]") && grid[1][1].matches("[O]") && grid[2][2].matches("[O]") ||
+                grid[0][2].matches("[O]") && grid[1][1].matches("[O]") && grid[2][0].matches("[O]"));
+    }
+
+
+    public void incrementPlayer() {
+        if (playerturn == 0) {
+            playerturn++;
+        }
+        else {
+            playerturn = 0;
+        }
+    }
     /**
      * Gets the id of the winner, -1 if its a draw.
      *
@@ -63,8 +117,15 @@ public class GameBoardTwoPlayer implements IGameModel
      */
     @Override
     public int getWinner() {
-        //TODO Implement this method
-        return -1;
+        if (checkOWin()) {
+            return 1;
+        }
+        else if (checkXWin()) {
+            return 0;
+        }
+        else {
+            return -1;
+        }
     }
 
     /**
@@ -86,6 +147,10 @@ public class GameBoardTwoPlayer implements IGameModel
     @Override
     public int getPlayerAt(int col, int row)
     {
+        return -1;
+    }
+}
+        /*
         int[][] boardgame = new int[3][3];
         boardgame[0][0] = -1;
         boardgame[0][1] = -1;
@@ -115,3 +180,5 @@ public class GameBoardTwoPlayer implements IGameModel
         return -1;
     }
 }
+
+         */

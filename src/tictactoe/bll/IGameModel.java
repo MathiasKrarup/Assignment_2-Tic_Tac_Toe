@@ -17,6 +17,11 @@ public interface IGameModel {
      */
     int getNextPlayer();
 
+    void incrementPlayer();
+
+    void setGrid(int col, int row, String text);
+
+    void resetBoard();
     /**
      * Attempts to let the current player play at the given coordinates. If the
      * attempt is successful the current player has ended his turn and it is the

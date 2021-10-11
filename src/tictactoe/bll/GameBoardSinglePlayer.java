@@ -37,6 +37,22 @@ public class GameBoardSinglePlayer implements IGameModel {
         }
     }
 
+    @Override
+    public void incrementPlayer() {
+
+    }
+
+    @Override
+    public void setGrid(int col, int row, String text) {
+
+    }
+
+    @Override
+    public void resetBoard() {
+
+    }
+
+
     /**
      * Attempts to let the current player play at the given coordinates. If the
      * attempt is successful the current player has ended his turn and it is the
